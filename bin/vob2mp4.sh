@@ -10,4 +10,4 @@ VIDENCODE_OPTIONS="-profile:v main"
 # The following may increase quality/compression at the expense of significant perfomance decrease
 #VIDENCODE_OPTIONS="${VIDENCODE_OPTIONS} -tune:v hq"
 
-ffmpeg -threads 1 -y -vsync 0 ${DECODE_ACCEL} -i "${INPUT}" ${DECODE_FILTERS} -c:a aac -c:v h264_nvenc ${VIDENCODE_OPTIONS} -rc:v vbr -cq:v 19 -movflags +faststart "${OUTPUT}"
+time ffmpeg -threads 1 -y -vsync 0 ${DECODE_ACCEL} -i "${INPUT}" ${DECODE_FILTERS} -c:a aac -c:v h264_nvenc ${VIDENCODE_OPTIONS} -rc:v vbr -cq:v 19 -movflags +faststart "${OUTPUT}"
