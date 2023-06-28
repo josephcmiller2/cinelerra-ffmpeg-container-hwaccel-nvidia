@@ -5,7 +5,7 @@ CPATH=$(realpath $(dirname "$0"))
 . "${CPATH}/config"
 
 if [[ "$1" == "" ]]; then
-    EXTRAARGS="$EXTRAARGS -v ${CPATH}/bcast:/root/.bcast:rw -v ${CPATH}/bin:/root/bin:rw"
+    EXTRAARGS="$EXTRAARGS -v ${CPATH}/bcast:/root/.bcast:rw"
 else
     BCASTSESS="$1"
     if [[ ! -d "${CPATH}/bcast-${BCASTSESS}" ]]; then
