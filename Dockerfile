@@ -56,12 +56,28 @@ RUN \
   cd /root/ffmpeg && \
   dpkg -i $(ls *.deb | grep -E -v 'libavcodec-extra58|libavfilter7|libavformat58|ffmpeg-doc|libavcodec-extra')
 
+ENV NVIDIA_DRIVER_VERSION 525_525.85.12
+ENV NVIDIA_DRIVER_RELEASE 0ubuntu1
+ENV ARCH amd64
+ENV NVIDIA_DOWNLOAD_PREFIX https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/
+
 RUN \
   mkdir /root/nvidia && cd /root/nvidia && \
-  wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libnvidia-encode-525_525.85.12-0ubuntu1_amd64.deb && \
-  wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/libnvidia-decode-525_525.85.12-0ubuntu1_amd64.deb && \
-  dpkg --force-all -i libnvidia-encode-525_525.85.12-0ubuntu1_amd64.deb libnvidia-decode-525_525.85.12-0ubuntu1_amd64.deb
+  wget ${NVIDIA_DOWNLOAD_PREFIX}/libnvidia-encode-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb && \
+  wget ${NVIDIA_DOWNLOAD_PREFIX}/libnvidia-decode-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb && \
+  wget ${NVIDIA_DOWNLOAD_PREFIX}/libnvidia-compute-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb && \
+  dpkg --force-all -i \
+    libnvidia-encode-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb \
+    libnvidia-decode-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb \
+    libnvidia-compute-${NVIDIA_DRIVER_VERSION}-${NVIDIA_DRIVER_RELEASE}_${ARCH}.deb
 
+RUN \
+  apt-get update && \
+  apt-get install -y git && \
+  cd /root && git clone https://github.com/anthwlock/untrunc.git && \
+  cd /root/untrunc && \
+  make && \
+  cp untrunc /usr/local/bin
 
 COPY files/startcontainer.sh /usr/bin/startcontainer.sh
 COPY files/subuid /etc/subuid

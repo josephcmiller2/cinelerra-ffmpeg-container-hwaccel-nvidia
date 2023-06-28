@@ -25,7 +25,7 @@ echo "FPS = $VID_FPS"
 VID_BITRATE=$(ffprobe 'peachy_icecream 2023-06-17 15_28.mp4' 2>&1 | grep 'Stream #' | grep Video | head -n 1  | perl -pe 's/^.*\s+([0-9\.]+)\s+(kb\/s|b\/s).*$/$1/')
 VID_BITRATE=$(echo "$VID_BITRATE 0"  | awk '{ print $1 + $2 }')
 VID_BITRATE_UNITS=$(ffprobe 'peachy_icecream 2023-06-17 15_28.mp4' 2>&1 | grep 'Stream #' | grep Video | head -n 1  | perl -pe 's/^.*\s+([0-9\.]+)\s+(k|)b\/s.*$/$2/')
-if [[ $VID_BITRATE == "" ]]; then
+if [[ $VID_BITRATE == "" ]] || [[ $VID_BITRATE == "0" ]] ; then
   VIDENCODE_BITRATE="20M"
 else
   VIDENCODE_BITRATE=$(echo "$VID_BITRATE $VIDENCODE_BITRATE_FACTOR" | awk '{ print $1 * $2 }')
